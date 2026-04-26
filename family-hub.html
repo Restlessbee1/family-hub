@@ -1332,6 +1332,7 @@ TODAY.setHours(0,0,0,0);
 
 let events = JSON.parse(localStorage.getItem('fh-events') || 'null') || [
   { id: 1,  title: "College Deposits / Deadlines",  date: "2026-05-01", who: "Both",    done: false, gcalSynced: true },
+  { id: 8,  title: "Addison's Graduation Party",    date: "2026-05-27", who: "Addison", done: false, gcalSynced: true },
   { id: 2,  title: "Parker Returns Home",            date: "2026-03-21", who: "Parker",  done: true,  gcalSynced: true },
   { id: 7,  title: "Parker — Road Trip Departure",   date: "2026-04-06", who: "Parker",  done: false, gcalSynced: true },
   { id: 3,  title: "Parker — Summer Job Secured",   date: "2026-05-15", who: "Parker",  done: false, gcalSynced: true },
@@ -1819,7 +1820,7 @@ async function runBriefing(forceRefresh = false) {
 
 You are the Family Hub assistant for Avery Maniscalco in Tampa, FL. Her family:
 - Parker (son, 19): Home from Breckenridge, leaves on 5-week road trip Apr 6, needs summer job before college in fall
-- Addison (daughter, 18): Graduating high school, hostess + baking business, heading to college in fall
+- Addison (daughter, 18): Graduating high school, hostess + baking business, heading to college in fall. Graduation party May 27, 4-7pm — catering from Psomi (pickup 3pm), florals from Boho Floral
 - Mike (husband): Runs family office (real estate, stocks, multiple business entities)
 - Tracy (sister): Lives in Manchester-by-the-Sea, MA with husband Ed
 
@@ -1828,7 +1829,7 @@ ${upcomingEvs}
 
 Your job:
 1. Use your Google Calendar tool to fetch today's events (${todayISO})
-2. Use your Gmail tool to scan the last 20 emails and identify anything notable or requiring action
+2. Use your Gmail tool to scan the last 20 emails and identify anything notable or requiring action. Pay special attention to: bills/autopayments, anything from Psomi or eatpsomi.com (Addison's party catering), Boho Floral (party florals), Paperless Post (party RSVPs), college-related emails, and anything time-sensitive.
 
 Then respond with ONLY a JSON object (no markdown, no backticks) in this exact shape:
 {
