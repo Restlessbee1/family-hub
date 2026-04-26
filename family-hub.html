@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Hub — Avery</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F8F5F0;
+    --warm-white: #FDFCFA;
+    --ink: #1C1917;
+    --ink-light: #44403C;
+    --muted: #A8A29E;
+    --border: #E7E2DA;
+    --border-light: #F0EBE3;
+
+    --amber: #B45309;
+    --amber-bg: #FEF3C7;
+    --amber-mid: #D97706;
+
+    --slate: #374151;
+    --slate-bg: #F0F4F8;
+    --slate-mid: #4B5563;
+
+    --sage: #3D6B52;
+    --sage-bg: #ECFDF5;
+    --sage-mid: #059669;
+
+    --plum: #6B3A7D;
+    --plum-bg: #F5F0FA;
+    --plum-mid: #7C3AED;
+
+    --red: #9B2335;
+    --red-bg: #FEF2F2;
+
+    --shadow-sm: 0 1px 3px rgba(28,25,23,0.06), 0 1px 2px rgba(28,25,23,0.04);
+    --shadow: 0 4px 12px rgba(28,25,23,0.08), 0 1px 3px rgba(28,25,23,0.05);
+    --shadow-lg: 0 12px 32px rgba(28,25,23,0.10), 0 4px 8px rgba(28,25,23,0.06);
+
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-xs: 5px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ─── HEADER ─────────────────────────────────────────── */
+  header {
+    background: var(--ink);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .header-brand h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #F8F5F0;
+    letter-spacing: 0.01em;
+  }
+
+  .header-brand .sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #live-date {
+    font-size: 11px;
+    color: #6B6661;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  .nav-wrap {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    position: sticky;
+    top: 60px;
+    z-index: 100;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    max-width: 1000px;
+  }
+
+  .tab-btn {
+    padding: 14px 22px;
+    border: none;
+    background: transparent;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    top: 1px;
+  }
+
+  .tab-btn:hover { color: var(--ink-light); }
+  .tab-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  /* ─── MAIN ─────────────────────────────────────────────── */
+  main {
+    padding: 32px 32px 64px;
+    max-width: 1000px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── PAGE TITLE ──────────────────────────────────────── */
+  .page-title {
+    margin-bottom: 28px;
+  }
+
+  .page-title h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+
+  .page-title p {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ─── PEOPLE GRID ─────────────────────────────────────── */
+  .people-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 14px;
+  }
+
+  .person-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .person-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+
+  .person-card .stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .stripe-blue   { background: #4B7CB8; }
+  .stripe-amber  { background: var(--amber-mid); }
+  .stripe-sage   { background: var(--sage-mid); }
+  .stripe-plum   { background: var(--plum-mid); }
+
+  .person-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .av-blue  { background: #4B7CB8; }
+  .av-amber { background: var(--amber-mid); }
+  .av-sage  { background: var(--sage-mid); }
+  .av-plum  { background: var(--plum-mid); }
+
+  .person-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .person-role {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+
+  .person-status-text {
+    font-size: 12.5px;
+    color: var(--ink-light);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .chip {
+    font-size: 10.5px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .chip-blue   { background: var(--slate-bg); color: var(--slate); }
+  .chip-amber  { background: var(--amber-bg); color: var(--amber); }
+  .chip-sage   { background: var(--sage-bg); color: var(--sage); }
+  .chip-plum   { background: var(--plum-bg); color: var(--plum); }
+  .chip-red    { background: var(--red-bg); color: var(--red); }
+
+  /* ─── DETAIL PANEL ────────────────────────────────────── */
+  .detail-panel {
+    display: none;
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 14px;
+  }
+
+  .detail-panel.open { display: block; }
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .detail-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .detail-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .close-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border);
+    background: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .close-btn:hover { background: var(--border); color: var(--ink); }
+
+  .field-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    color: var(--muted);
+    margin-bottom: 7px;
+    margin-top: 16px;
+  }
+
+  .notes-area {
+    width: 100%;
+    min-height: 110px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--paper);
+    resize: vertical;
+    line-height: 1.6;
+    transition: border-color 0.15s;
+  }
+
+  .notes-area:focus { outline: none; border-color: var(--ink-light); }
+
+  .save-btn {
+    margin-top: 10px;
+    padding: 7px 18px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .save-btn:hover { opacity: 0.75; }
+
+  .save-confirm {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--sage);
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  /* ─── EVENTS ──────────────────────────────────────────── */
+  .events-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .events-header-row .count-note {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .ghost-btn {
+    padding: 7px 16px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-light);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ghost-btn:hover { border-color: var(--ink-light); color: var(--ink); }
+
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--warm-white);
+  }
+
+  /* ── event item wrapper (row + edit drawer) */
+  .event-item { border-bottom: 1px solid var(--border-light); }
+  .event-item:last-child { border-bottom: none; }
+
+  .event-row {
+    padding: 13px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: background 0.12s;
+    user-select: none;
+  }
+
+  .event-row:hover { background: var(--paper); }
+  .event-item.expanded .event-row { background: var(--paper); }
+  .event-item.done-item { opacity: 0.42; }
+
+  .event-accent-bar {
+    width: 3px;
+    height: 34px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── date badge replacing countdown */
+  .event-date-badge {
+    min-width: 52px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .edb-day {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    display: block;
+  }
+
+  .edb-dow {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    color: var(--muted);
+    margin-top: 1px;
+    display: block;
+  }
+
+  .edb-urgent { color: var(--red); }
+  .edb-soon   { color: var(--amber-mid); }
+  .edb-future { color: #4B7CB8; }
+  .edb-done   { color: var(--muted); }
+  .edb-past   { color: var(--muted); }
+
+  /* countdown pill — shown next to title */
+  .ev-countdown-pill {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
+  .pill-urgent { background: var(--red-bg); color: var(--red); }
+  .pill-soon   { background: var(--amber-bg); color: var(--amber); }
+  .pill-future { background: var(--slate-bg); color: var(--slate-mid); }
+  .pill-done   { background: var(--sage-bg); color: var(--sage); }
+  .pill-past   { background: var(--border); color: var(--muted); }
+
+  .event-divider-v {
+    width: 1px;
+    height: 30px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .event-body { flex: 1; min-width: 0; }
+
+  .event-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+
+  .event-title {
+    font-size: 13.5px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .event-item.done-item .event-title { text-decoration: line-through; }
+
+  .event-meta {
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  .event-btns {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+
+  .icon-btn.check:hover { background: var(--sage-bg); border-color: var(--sage-mid); color: var(--sage); }
+  .icon-btn.del:hover   { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+  .icon-btn.edit-tog { font-size: 10px; }
+  .event-item.expanded .icon-btn.edit-tog { background: var(--border); color: var(--ink); }
+
+  /* ── INLINE EDIT DRAWER */
+  .event-edit-drawer {
+    display: none;
+    padding: 0 16px 16px 16px;
+    border-top: 1px dashed var(--border);
+    background: var(--paper);
+    animation: slideDown 0.15s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .event-item.expanded .event-edit-drawer { display: block; }
+
+  .edit-drawer-grid {
+    display: grid;
+    grid-template-columns: 1fr 140px 120px;
+    gap: 10px;
+    margin-top: 14px;
+    margin-bottom: 12px;
+  }
+
+  .edit-drawer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* gcal sync button */
+  .gcal-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 13px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--ink-light);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .gcal-btn:hover { border-color: #4285F4; color: #4285F4; }
+  .gcal-btn.synced { border-color: var(--sage-mid); color: var(--sage); background: var(--sage-bg); }
+  .gcal-btn.syncing { opacity: 0.6; cursor: default; }
+
+  .gcal-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ADD EVENT FORM */
+  .add-card {
+    background: var(--warm-white);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .add-card-open {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .form-col { display: flex; flex-direction: column; gap: 5px; }
+
+  .form-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--muted);
+  }
+
+  .form-input {
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    background: var(--paper);
+    color: var(--ink);
+    transition: border-color 0.15s;
+  }
+
+  .form-input:focus { outline: none; border-color: var(--ink-light); }
+
+  .primary-btn {
+    padding: 8px 18px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .primary-btn:hover { opacity: 0.75; }
+
+  /* ─── BILLS ──────────────────────────────────────────── */
+  .bills-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .summary-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+  }
+
+  .summary-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .summary-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .sa-total    { color: var(--ink); }
+  .sa-fixed    { color: #4B7CB8; }
+  .sa-variable { color: var(--amber-mid); }
+
+  .bills-table {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .bills-table-head {
+    display: grid;
+    grid-template-columns: 2fr 80px 1fr 110px 50px;
+    padding: 9px 16px;
+    background: var(--ink);
+    gap: 12px;
+  }
+
+  .bills-table-head span {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    color: #7A746F;
+  }
+
+  .bills-table-head span:nth-child(3) { text-align: right; }
+
+  .bill-row {
+    display: grid;
+    grid-template-columns: 2fr 80px 1fr 110px 50px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border-light);
+    align-items: center;
+    gap: 12px;
+    transition: background 0.12s;
+  }
+
+  .bill-row:last-child { border-bottom: none; }
+  .bill-row:hover { background: var(--paper); }
+
+  .bill-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .type-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    width: fit-content;
+    letter-spacing: 0.02em;
+  }
+
+  .tb-fixed    { background: var(--slate-bg); color: var(--slate-mid); }
+  .tb-variable { background: var(--amber-bg); color: var(--amber); }
+  .tb-college  { background: var(--sage-bg);  color: var(--sage); }
+
+  .amount-input {
+    width: 100%;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    background: var(--paper);
+    color: var(--ink);
+    text-align: right;
+    transition: border-color 0.15s;
+  }
+
+  .amount-input:focus { outline: none; border-color: var(--ink-light); }
+
+  .bill-due {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .bill-del-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--border);
+    font-size: 15px;
+    text-align: center;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+
+  .bill-del-btn:hover { color: var(--red); background: var(--red-bg); }
+
+  .add-bill-row {
+    padding: 12px 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border-top: 1px dashed var(--border);
+    flex-wrap: wrap;
+  }
+
+  select.form-input {
+    cursor: pointer;
+    min-width: 90px;
+  }
+
+  /* ─── MORNING BRIEFING ───────────────────────────────── */
+  .briefing-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .briefing-meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .refresh-btn:hover { opacity: 0.75; }
+  .refresh-btn:disabled { opacity: 0.45; cursor: default; }
+
+  .refresh-btn .spin {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* briefing sections */
+  .briefing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .briefing-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+  }
+
+  .briefing-card.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .bc-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .bc-label .bc-icon {
+    font-size: 13px;
+  }
+
+  .bc-content {
+    font-size: 13px;
+    color: var(--ink-light);
+    line-height: 1.65;
+  }
+
+  .bc-content .bc-item {
+    display: flex;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border-light);
+    align-items: flex-start;
+  }
+
+  .bc-content .bc-item:last-child { border-bottom: none; }
+
+  .bc-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber-mid);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .bc-dot.urgent { background: var(--red); }
+  .bc-dot.calm   { background: var(--sage-mid); }
+  .bc-dot.blue   { background: #4B7CB8; }
+
+  .bc-event-time {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 1px;
+    min-width: 52px;
+  }
+
+  .bc-event-title { flex: 1; }
+
+  /* narrative summary */
+  .briefing-narrative {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--ink-light);
+    white-space: pre-wrap;
+  }
+
+  /* skeleton / loading state */
+  .briefing-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .skel-line {
+    height: 13px;
+    background: linear-gradient(90deg, var(--border) 25%, var(--border-light) 50%, var(--border) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 4px;
+  }
+
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  /* empty / error state */
+  .briefing-empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+  }
+
+  .briefing-empty .be-icon { font-size: 32px; margin-bottom: 12px; }
+  .briefing-empty p { font-size: 13px; line-height: 1.6; max-width: 320px; margin: 0 auto; }
+
+  /* ─── MARKETS ────────────────────────────────────────── */
+  .markets-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .markets-meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .markets-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .market-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .market-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .market-card.up::before   { background: var(--sage-mid); }
+  .market-card.down::before { background: var(--red); }
+  .market-card.flat::before { background: var(--muted); }
+
+  .mc-name {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .mc-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .mc-change {
+    font-size: 11.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .mc-change.up   { color: var(--sage-mid); }
+  .mc-change.down { color: var(--red); }
+  .mc-change.flat { color: var(--muted); }
+
+  .markets-narrative {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+
+  .markets-narrative .bc-label { margin-bottom: 10px; }
+
+  .markets-narrative p {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--ink-light);
+  }
+
+  .markets-loading .market-card .mc-value {
+    color: var(--border);
+  }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────── */
+  @media (max-width: 680px) {
+    header, .nav-wrap, main { padding-left: 16px; padding-right: 16px; }
+    .bills-summary { grid-template-columns: 1fr 1fr; }
+    .bills-table-head,
+    .bill-row { grid-template-columns: 2fr 1fr 1fr; }
+    .bills-table-head span:nth-child(4),
+    .bills-table-head span:nth-child(5),
+    .bill-row > *:nth-child(4),
+    .bill-row > *:nth-child(5) { display: none; }
+    .people-grid { grid-template-columns: 1fr; }
+    .briefing-grid { grid-template-columns: 1fr; }
+    .markets-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <h1>Family Hub</h1>
+    <span class="sub">Avery</span>
+  </div>
+  <div id="live-date"></div>
+</header>
+
+<div class="nav-wrap">
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('people', this)">People</button>
+    <button class="tab-btn" onclick="switchTab('events', this)">Events</button>
+    <button class="tab-btn" onclick="switchTab('bills', this)">Bills</button>
+    <button class="tab-btn" onclick="switchTab('briefing', this)">Morning Briefing</button>
+    <button class="tab-btn" onclick="switchTab('markets', this)">Markets</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- ═══ PEOPLE TAB ═══════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-people">
+    <div class="page-title">
+      <h2>Your People</h2>
+      <p>Tap a card to open notes</p>
+    </div>
+
+    <div class="people-grid">
+
+      <div class="person-card" onclick="openDetail('parker')">
+        <div class="stripe stripe-blue"></div>
+        <div class="person-avatar av-blue">P</div>
+        <div class="person-name">Parker</div>
+        <div class="person-role">Son · 19</div>
+        <div class="person-status-text">Home from Breckenridge. Leaves on 5-week cross-country road trip Apr 6. Needs summer job before college in fall.</div>
+        <div class="chips">
+          <span class="chip chip-blue">Home</span>
+          <span class="chip chip-blue">Road trip · Apr 6</span>
+          <span class="chip chip-red">Job needed</span>
+          <span class="chip chip-blue">College · Fall</span>
+        </div>
+      </div>
+
+      <div class="person-card" onclick="openDetail('addison')">
+        <div class="stripe stripe-amber"></div>
+        <div class="person-avatar av-amber">A</div>
+        <div class="person-name">Addison</div>
+        <div class="person-role">Daughter · 18</div>
+        <div class="person-status-text">Graduating high school. Hostess + baking business. Heading to college in fall.</div>
+        <div class="chips">
+          <span class="chip chip-amber">Graduating</span>
+          <span class="chip chip-amber">College · Fall</span>
+          <span class="chip chip-sage">Working</span>
+        </div>
+      </div>
+
+      <div class="person-card" onclick="openDetail('mike')">
+        <div class="stripe stripe-sage"></div>
+        <div class="person-avatar av-sage">M</div>
+        <div class="person-name">Mike</div>
+        <div class="person-role">Husband</div>
+        <div class="person-status-text">Family office — real estate, stocks, multiple business entities.</div>
+        <div class="chips">
+          <span class="chip chip-sage">Family office</span>
+        </div>
+      </div>
+
+      <div class="person-card" onclick="openDetail('tracy')">
+        <div class="stripe stripe-plum"></div>
+        <div class="person-avatar av-plum">T</div>
+        <div class="person-name">Tracy</div>
+        <div class="person-role">Sister · Manchester-by-the-Sea</div>
+        <div class="person-status-text">Lives in MA with husband Ed. Three sons — two graduated, one in college.</div>
+        <div class="chips">
+          <span class="chip chip-plum">Massachusetts</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Detail Panels -->
+    <div id="detail-parker" class="detail-panel">
+      <div class="detail-header">
+        <div class="detail-header-left">
+          <div class="person-avatar av-blue" style="width:32px;height:32px;font-size:14px;">P</div>
+          <h3>Parker</h3>
+        </div>
+        <button class="close-btn" onclick="closeDetail('parker')">✕</button>
+      </div>
+      <div class="field-label">Notes &amp; active items</div>
+      <textarea class="notes-area" id="notes-parker" placeholder="Job leads, return date, college logistics, summer plans..."></textarea>
+      <div style="margin-top:10px;">
+        <button class="save-btn" onclick="saveNotes('parker')">Save</button>
+        <span class="save-confirm" id="confirm-parker">Saved ✓</span>
+      </div>
+    </div>
+
+    <div id="detail-addison" class="detail-panel">
+      <div class="detail-header">
+        <div class="detail-header-left">
+          <div class="person-avatar av-amber" style="width:32px;height:32px;font-size:14px;">A</div>
+          <h3>Addison</h3>
+        </div>
+        <button class="close-btn" onclick="closeDetail('addison')">✕</button>
+      </div>
+      <div class="field-label">Notes &amp; active items</div>
+      <textarea class="notes-area" id="notes-addison" placeholder="Graduation details, college prep, work schedule, baking orders..."></textarea>
+      <div style="margin-top:10px;">
+        <button class="save-btn" onclick="saveNotes('addison')">Save</button>
+        <span class="save-confirm" id="confirm-addison">Saved ✓</span>
+      </div>
+    </div>
+
+    <div id="detail-mike" class="detail-panel">
+      <div class="detail-header">
+        <div class="detail-header-left">
+          <div class="person-avatar av-sage" style="width:32px;height:32px;font-size:14px;">M</div>
+          <h3>Mike</h3>
+        </div>
+        <button class="close-btn" onclick="closeDetail('mike')">✕</button>
+      </div>
+      <div class="field-label">Notes</div>
+      <textarea class="notes-area" id="notes-mike" placeholder="Business items, schedule notes, anything to flag..."></textarea>
+      <div style="margin-top:10px;">
+        <button class="save-btn" onclick="saveNotes('mike')">Save</button>
+        <span class="save-confirm" id="confirm-mike">Saved ✓</span>
+      </div>
+    </div>
+
+    <div id="detail-tracy" class="detail-panel">
+      <div class="detail-header">
+        <div class="detail-header-left">
+          <div class="person-avatar av-plum" style="width:32px;height:32px;font-size:14px;">T</div>
+          <h3>Tracy</h3>
+        </div>
+        <button class="close-btn" onclick="closeDetail('tracy')">✕</button>
+      </div>
+      <div class="field-label">Notes</div>
+      <textarea class="notes-area" id="notes-tracy" placeholder="Plans to visit, calls to make, family updates..."></textarea>
+      <div style="margin-top:10px;">
+        <button class="save-btn" onclick="saveNotes('tracy')">Save</button>
+        <span class="save-confirm" id="confirm-tracy">Saved ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ EVENTS TAB ════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-events">
+    <div class="page-title">
+      <h2>Upcoming Events</h2>
+      <p>Click any event to edit · Red = within 30 days · Amber = within 90</p>
+    </div>
+
+    <div class="events-header-row">
+      <span class="count-note" id="event-count"></span>
+      <button class="ghost-btn" onclick="toggleAddEvent()">+ Add Event</button>
+    </div>
+
+    <div id="add-event-form" style="display:none;" class="add-card-open">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+        <div class="form-col">
+          <label class="form-label">Event</label>
+          <input class="form-input" id="new-event-title" type="text" placeholder="e.g. Parker job interview" style="min-width:200px;">
+        </div>
+        <div class="form-col">
+          <label class="form-label">Date</label>
+          <input class="form-input" id="new-event-date" type="date">
+        </div>
+        <div class="form-col">
+          <label class="form-label">Who</label>
+          <input class="form-input" id="new-event-who" type="text" placeholder="Parker, Addison..." style="min-width:120px;">
+        </div>
+        <button class="primary-btn" onclick="addEvent()">Add</button>
+        <button class="ghost-btn" onclick="toggleAddEvent()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="events-list" id="events-list"></div>
+  </div>
+
+  <!-- ═══ BILLS TAB ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-bills">
+    <div class="page-title">
+      <h2>Bills &amp; Budget</h2>
+      <p>Enter amounts · Totals update automatically</p>
+    </div>
+
+    <div class="bills-summary">
+      <div class="summary-card">
+        <div class="summary-label">Total Monthly</div>
+        <div class="summary-amount sa-total" id="total-amount">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Fixed</div>
+        <div class="summary-amount sa-fixed" id="fixed-amount">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Variable / College</div>
+        <div class="summary-amount sa-variable" id="variable-amount">—</div>
+      </div>
+    </div>
+
+    <div class="bills-table">
+      <div class="bills-table-head">
+        <span>Bill / Category</span>
+        <span>Type</span>
+        <span style="text-align:right;">Amount</span>
+        <span>Due</span>
+        <span></span>
+      </div>
+      <div id="bills-list"></div>
+      <div class="add-bill-row">
+        <input class="form-input" id="new-bill-name" type="text" placeholder="Bill name" style="min-width:160px;flex:1;">
+        <select class="form-input" id="new-bill-type">
+          <option value="fixed">Fixed</option>
+          <option value="variable">Variable</option>
+          <option value="college">College</option>
+        </select>
+        <input class="form-input" id="new-bill-due" type="text" placeholder="Due date" style="min-width:100px;">
+        <button class="primary-btn" onclick="addBill()">+ Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MORNING BRIEFING TAB ════════════════════════════ -->
+  <div class="tab-panel" id="tab-briefing">
+    <div class="briefing-top">
+      <div>
+        <div class="page-title" style="margin-bottom:4px;">
+          <h2>Morning Briefing</h2>
+          <p>Today's calendar, email digest, and family priorities</p>
+        </div>
+        <div class="briefing-meta" id="briefing-timestamp">Not yet loaded — hit Generate to pull today's digest</div>
+      </div>
+      <button class="refresh-btn" id="briefing-btn" onclick="runBriefing()">
+        <span id="briefing-btn-icon">☀</span> Generate Briefing
+      </button>
+    </div>
+
+    <div id="briefing-body">
+      <div class="briefing-empty">
+        <div class="be-icon">☀️</div>
+        <p>Click <strong>Generate Briefing</strong> to pull today's calendar and email digest. Results are cached per day so it's instant after the first load.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MARKETS TAB ══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-markets">
+    <div class="markets-top">
+      <div>
+        <div class="page-title" style="margin-bottom:4px;">
+          <h2>Markets</h2>
+          <p>Live snapshot · Relevant for family office context</p>
+        </div>
+        <div class="markets-meta" id="markets-timestamp">Not yet loaded</div>
+      </div>
+      <button class="refresh-btn" id="markets-btn" onclick="runMarkets()">
+        <span id="markets-btn-icon">📈</span> Pull Market Data
+      </button>
+    </div>
+
+    <div id="markets-body">
+      <div class="briefing-empty">
+        <div class="be-icon">📈</div>
+        <p>Click <strong>Pull Market Data</strong> for today's snapshot — indices, rates, volatility, commodities, and a brief narrative.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+const TODAY = new Date();
+TODAY.setHours(0,0,0,0);
+
+let events = JSON.parse(localStorage.getItem('fh-events') || 'null') || [
+  { id: 1,  title: "College Deposits / Deadlines",  date: "2026-05-01", who: "Both",    done: false, gcalSynced: true },
+  { id: 2,  title: "Parker Returns Home",            date: "2026-03-21", who: "Parker",  done: true,  gcalSynced: true },
+  { id: 7,  title: "Parker — Road Trip Departure",   date: "2026-04-06", who: "Parker",  done: false, gcalSynced: true },
+  { id: 3,  title: "Parker — Summer Job Secured",   date: "2026-05-15", who: "Parker",  done: false, gcalSynced: true },
+  { id: 4,  title: "Addison's Graduation",           date: "2026-06-07", who: "Addison", done: false, gcalSynced: true },
+  { id: 5,  title: "Addison — College Move-In",      date: "2026-08-22", who: "Addison", done: false, gcalSynced: true },
+  { id: 6,  title: "Parker — College Move-In",       date: "2026-08-29", who: "Parker",  done: false, gcalSynced: true },
+];
+
+let bills = JSON.parse(localStorage.getItem('fh-bills') || 'null') || [
+  { id: 1,  name: "Mortgage / Rent",           type: "fixed",    amount: "",       due: "1st" },
+  { id: 2,  name: "Tampa Electric",            type: "variable", amount: "359.23", due: "Apr 6 · autopay" },
+  { id: 3,  name: "Peoples Gas",               type: "variable", amount: "70.17",  due: "Apr 6" },
+  { id: 4,  name: "Frontier (Internet)",       type: "fixed",    amount: "64.99",  due: "31st · autopay" },
+  { id: 5,  name: "Verizon (Cell)",            type: "fixed",    amount: "478.22", due: "3rd · autopay" },
+  { id: 6,  name: "Ally Auto — Car 1",         type: "fixed",    amount: "",       due: "17th · autopay" },
+  { id: 7,  name: "Ally Auto — Car 2",         type: "fixed",    amount: "",       due: "26th · autopay" },
+  { id: 8,  name: "Home Insurance",            type: "fixed",    amount: "",       due: "" },
+  { id: 9,  name: "Health Insurance",          type: "fixed",    amount: "",       due: "" },
+  { id: 10, name: "Chase Prime Visa",          type: "variable", amount: "",       due: "~18th" },
+  { id: 11, name: "Capital One Miles",         type: "variable", amount: "",       due: "~23rd" },
+  { id: 12, name: "Nordstrom Card",            type: "variable", amount: "",       due: "~21st" },
+  { id: 13, name: "Optimum Gym",              type: "fixed",    amount: "74.95",  due: "⚠️ autopay failing" },
+  { id: 14, name: "YouTube TV",               type: "fixed",    amount: "",       due: "⚠️ payment failing" },
+  { id: 15, name: "Arlo (Security)",          type: "fixed",    amount: "21.49",  due: "⚠️ payment failed" },
+  { id: 16, name: "Ready Refresh (Water)",    type: "fixed",    amount: "",       due: "~25th" },
+  { id: 17, name: "Addison — College Tuition", type: "college",  amount: "",       due: "" },
+  { id: 18, name: "Parker — College Tuition",  type: "college",  amount: "",       due: "" },
+];
+
+let notes = JSON.parse(localStorage.getItem('fh-notes') || '{}');
+
+/* ═══════════════════════════════════════════════════════
+   DATE
+═══════════════════════════════════════════════════════ */
+(function() {
+  const d = new Date();
+  document.getElementById('live-date').textContent = d.toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════
+   PEOPLE
+═══════════════════════════════════════════════════════ */
+function openDetail(person) {
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('open'));
+  const panel = document.getElementById('detail-' + person);
+  panel.classList.add('open');
+  const ta = document.getElementById('notes-' + person);
+  if (notes[person]) ta.value = notes[person];
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function closeDetail(person) {
+  document.getElementById('detail-' + person).classList.remove('open');
+}
+
+function saveNotes(person) {
+  notes[person] = document.getElementById('notes-' + person).value;
+  localStorage.setItem('fh-notes', JSON.stringify(notes));
+  const c = document.getElementById('confirm-' + person);
+  c.style.opacity = '1';
+  setTimeout(() => c.style.opacity = '0', 2000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   EVENTS
+═══════════════════════════════════════════════════════ */
+const DAYS_OF_WEEK = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function daysUntil(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return Math.round((d - TODAY) / 86400000);
+}
+
+function personColor(who) {
+  if (!who) return '#8A8480';
+  const w = who.toLowerCase();
+  if (w.includes('parker'))  return '#4B7CB8';
+  if (w.includes('addison')) return '#D97706';
+  if (w.includes('mike'))    return '#059669';
+  if (w.includes('tracy'))   return '#7C3AED';
+  return '#8A8480';
+}
+
+function toggleAddEvent() {
+  const f = document.getElementById('add-event-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+// Track which event is expanded for editing
+let expandedEventId = null;
+
+function toggleExpandEvent(id, e) {
+  // Prevent bubbling from inner buttons
+  if (e && e.target.closest('button:not(.edit-tog)')) return;
+  expandedEventId = (expandedEventId === id) ? null : id;
+  renderEvents();
+  // Restore focus to the edit fields if opening
+  if (expandedEventId === id) {
+    setTimeout(() => {
+      const el = document.getElementById('edit-title-' + id);
+      if (el) el.focus();
+    }, 50);
+  }
+}
+
+function saveEditedEvent(id) {
+  const ev = events.find(e => e.id === id);
+  if (!ev) return;
+  const newTitle = document.getElementById('edit-title-' + id).value.trim();
+  const newDate  = document.getElementById('edit-date-' + id).value;
+  const newWho   = document.getElementById('edit-who-' + id).value.trim();
+  if (newTitle) ev.title = newTitle;
+  if (newDate)  ev.date  = newDate;
+  ev.who = newWho;
+  // Clear gcal sync state if date/title changed
+  ev.gcalSynced = false;
+  saveEvents();
+  expandedEventId = null;
+  renderEvents();
+}
+
+function cancelEdit() {
+  expandedEventId = null;
+  renderEvents();
+}
+
+async function syncToGcal(id) {
+  const ev = events.find(e => e.id === id);
+  if (!ev) return;
+
+  const btn = document.getElementById('gcal-btn-' + id);
+  if (!btn) return;
+  btn.classList.add('syncing');
+  btn.innerHTML = gcalIconSVG() + ' Syncing…';
+
+  try {
+    // Use Claude's Google Calendar MCP via the Anthropic API
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        mcp_servers: [{ type: 'url', url: 'https://gcal.mcp.claude.com/mcp', name: 'gcal' }],
+        messages: [{
+          role: 'user',
+          content: `Create an all-day Google Calendar event on the primary calendar with:
+- title: "${ev.title}"
+- date: ${ev.date}
+- description: "Family Hub event${ev.who ? ' — ' + ev.who : ''}"
+Just create the event and confirm. No extra explanation needed.`
+        }]
+      })
+    });
+
+    const data = await response.json();
+    // Check for success in the response content
+    const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+    const toolResults = (data.content || []).filter(b => b.type === 'mcp_tool_result');
+    const success = toolResults.length > 0 || textBlocks.toLowerCase().includes('created') || textBlocks.toLowerCase().includes('success');
+
+    if (success) {
+      ev.gcalSynced = true;
+      saveEvents();
+      btn.classList.remove('syncing');
+      btn.classList.add('synced');
+      btn.innerHTML = gcalIconSVG() + ' Synced ✓';
+    } else {
+      throw new Error(textBlocks || 'Unknown error');
+    }
+  } catch (err) {
+    btn.classList.remove('syncing');
+    btn.innerHTML = gcalIconSVG() + ' Retry sync';
+    btn.title = 'Error: ' + (err.message || 'Failed');
+    console.error('GCal sync error:', err);
+  }
+}
+
+function gcalIconSVG() {
+  return `<svg class="gcal-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+    <path d="M3 9h18" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M8 4V2M16 4V2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    <rect x="8" y="13" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.7"/>
+    <rect x="13" y="13" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.7"/>
+  </svg>`;
+}
+
+function renderEvents() {
+  const list = document.getElementById('events-list');
+  const sorted = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const upcoming = sorted.filter(e => !e.done && daysUntil(e.date) >= 0).length;
+  document.getElementById('event-count').textContent = upcoming + ' upcoming';
+
+  list.innerHTML = sorted.map(ev => {
+    const days    = daysUntil(ev.date);
+    const isPast  = !ev.done && days < 0;
+    const isDone  = ev.done || isPast;
+    const isExpanded = expandedEventId === ev.id;
+
+    const dateObj = new Date(ev.date + 'T00:00:00');
+    const dayNum  = dateObj.getDate();
+    const dowStr  = DAYS_OF_WEEK[dateObj.getDay()];
+    const monStr  = MONTHS_SHORT[dateObj.getMonth()];
+    const yearStr = dateObj.getFullYear();
+
+    // Date badge color
+    let dbClass = 'edb-future';
+    if (ev.done)       dbClass = 'edb-done';
+    else if (isPast)   dbClass = 'edb-past';
+    else if (days === 0) dbClass = 'edb-urgent';
+    else if (days <= 30) dbClass = 'edb-urgent';
+    else if (days <= 90) dbClass = 'edb-soon';
+
+    // Countdown pill
+    let pillClass = 'pill-future', pillText = '';
+    if (ev.done)         { pillClass = 'pill-done';   pillText = 'done'; }
+    else if (isPast)     { pillClass = 'pill-past';   pillText = Math.abs(days) + 'd ago'; }
+    else if (days === 0) { pillClass = 'pill-urgent';  pillText = 'today'; }
+    else if (days === 1) { pillClass = 'pill-urgent';  pillText = 'tomorrow'; }
+    else if (days <= 30) { pillClass = 'pill-urgent';  pillText = days + 'd'; }
+    else if (days <= 90) { pillClass = 'pill-soon';    pillText = days + 'd'; }
+    else                 { pillClass = 'pill-future';  pillText = days + 'd'; }
+
+    const color    = personColor(ev.who);
+    const fullDate = dowStr + ', ' + monStr + ' ' + dayNum + ', ' + yearStr;
+    const isSynced = ev.gcalSynced;
+
+    const editDrawer = isExpanded ? `
+      <div class="event-edit-drawer" onclick="event.stopPropagation()">
+        <div class="edit-drawer-grid">
+          <div class="form-col">
+            <label class="form-label">Event name</label>
+            <input class="form-input" id="edit-title-${ev.id}" value="${ev.title.replace(/"/g, '&quot;')}" style="width:100%">
+          </div>
+          <div class="form-col">
+            <label class="form-label">Date</label>
+            <input class="form-input" id="edit-date-${ev.id}" type="date" value="${ev.date}">
+          </div>
+          <div class="form-col">
+            <label class="form-label">Who</label>
+            <input class="form-input" id="edit-who-${ev.id}" value="${ev.who || ''}" placeholder="Parker, Addison...">
+          </div>
+        </div>
+        <div class="edit-drawer-actions">
+          <button class="primary-btn" onclick="saveEditedEvent(${ev.id})">Save</button>
+          <button class="ghost-btn" onclick="cancelEdit()">Cancel</button>
+          <div style="flex:1"></div>
+          <button class="gcal-btn ${isSynced ? 'synced' : ''}" id="gcal-btn-${ev.id}" onclick="syncToGcal(${ev.id})">
+            ${gcalIconSVG()}
+            ${isSynced ? 'Synced ✓' : 'Add to Google Calendar'}
+          </button>
+        </div>
+      </div>` : '';
+
+    return `<div class="event-item ${isDone ? 'done-item' : ''} ${isExpanded ? 'expanded' : ''}">
+      <div class="event-row" onclick="toggleExpandEvent(${ev.id}, event)">
+        <div class="event-accent-bar" style="background:${color}"></div>
+        <div class="event-date-badge">
+          <span class="edb-day ${dbClass}">${ev.done ? '✓' : dayNum}</span>
+          <span class="edb-dow">${ev.done ? 'done' : dowStr}</span>
+        </div>
+        <div class="event-divider-v"></div>
+        <div class="event-body">
+          <div class="event-title-row">
+            <span class="event-title">${ev.title}</span>
+            <span class="ev-countdown-pill ${pillClass}">${pillText}</span>
+          </div>
+          <div class="event-meta">${fullDate}${ev.who ? ' · ' + ev.who : ''}</div>
+        </div>
+        <div class="event-btns">
+          <button class="icon-btn edit-tog" onclick="toggleExpandEvent(${ev.id}, event)" title="${isExpanded ? 'Collapse' : 'Edit'}">✎</button>
+          <button class="icon-btn check" onclick="event.stopPropagation(); toggleEvent(${ev.id})" title="${ev.done ? 'Unmark' : 'Mark done'}">✓</button>
+          <button class="icon-btn del" onclick="event.stopPropagation(); deleteEvent(${ev.id})" title="Delete">✕</button>
+        </div>
+      </div>
+      ${editDrawer}
+    </div>`;
+  }).join('');
+}
+
+function addEvent() {
+  const title = document.getElementById('new-event-title').value.trim();
+  const date  = document.getElementById('new-event-date').value;
+  const who   = document.getElementById('new-event-who').value.trim();
+  if (!title || !date) return;
+  events.push({ id: Date.now(), title, date, who, done: false, gcalSynced: false });
+  saveEvents();
+  renderEvents();
+  document.getElementById('new-event-title').value = '';
+  document.getElementById('new-event-date').value  = '';
+  document.getElementById('new-event-who').value   = '';
+  document.getElementById('add-event-form').style.display = 'none';
+}
+
+function toggleEvent(id) {
+  const ev = events.find(e => e.id === id);
+  if (ev) ev.done = !ev.done;
+  if (expandedEventId === id) expandedEventId = null;
+  saveEvents(); renderEvents();
+}
+
+function deleteEvent(id) {
+  events = events.filter(e => e.id !== id);
+  if (expandedEventId === id) expandedEventId = null;
+  saveEvents(); renderEvents();
+}
+
+function saveEvents() {
+  localStorage.setItem('fh-events', JSON.stringify(events));
+}
+
+/* ═══════════════════════════════════════════════════════
+   BILLS
+═══════════════════════════════════════════════════════ */
+function parseMoney(v) {
+  return parseFloat(String(v || '').replace(/[^0-9.]/g, '')) || 0;
+}
+
+function fmtMoney(n) {
+  if (n === 0) return '—';
+  return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+function calcTotals() {
+  let fixed = 0, variable = 0;
+  bills.forEach(b => {
+    const a = parseMoney(b.amount);
+    if (b.type === 'fixed') fixed += a; else variable += a;
+  });
+  document.getElementById('total-amount').textContent   = fmtMoney(fixed + variable);
+  document.getElementById('fixed-amount').textContent   = fmtMoney(fixed);
+  document.getElementById('variable-amount').textContent = fmtMoney(variable);
+}
+
+function renderBills() {
+  const list = document.getElementById('bills-list');
+  list.innerHTML = bills.map(b => `
+    <div class="bill-row">
+      <div class="bill-name">${b.name}</div>
+      <div><span class="type-badge tb-${b.type}">${b.type}</span></div>
+      <div style="text-align:right;">
+        <input class="amount-input" type="text" value="${b.amount || ''}" placeholder="0"
+          oninput="updateBillAmount(${b.id}, this.value)">
+      </div>
+      <div class="bill-due">${b.due || ''}</div>
+      <div style="text-align:center;">
+        <button class="bill-del-btn" onclick="deleteBill(${b.id})">✕</button>
+      </div>
+    </div>
+  `).join('');
+  calcTotals();
+}
+
+function updateBillAmount(id, val) {
+  const b = bills.find(b => b.id === id);
+  if (b) b.amount = val;
+  saveBills(); calcTotals();
+}
+
+function addBill() {
+  const name = document.getElementById('new-bill-name').value.trim();
+  const type = document.getElementById('new-bill-type').value;
+  const due  = document.getElementById('new-bill-due').value.trim();
+  if (!name) return;
+  bills.push({ id: Date.now(), name, type, amount: '', due });
+  saveBills(); renderBills();
+  document.getElementById('new-bill-name').value = '';
+  document.getElementById('new-bill-due').value  = '';
+}
+
+function deleteBill(id) {
+  bills = bills.filter(b => b.id !== id);
+  saveBills(); renderBills();
+}
+
+function saveBills() {
+  localStorage.setItem('fh-bills', JSON.stringify(bills));
+}
+
+/* ═══════════════════════════════════════════════════════
+   MORNING BRIEFING
+═══════════════════════════════════════════════════════ */
+const BRIEFING_MODEL   = 'claude-sonnet-4-20250514';
+const GCAL_MCP         = 'https://gcal.mcp.claude.com/mcp';
+const GMAIL_MCP        = 'https://gmail.mcp.claude.com/mcp';
+
+function briefingCacheKey() {
+  const d = new Date();
+  return 'fh-briefing-' + d.toISOString().slice(0, 10);
+}
+
+function setBriefingLoading(on) {
+  const btn  = document.getElementById('briefing-btn');
+  const icon = document.getElementById('briefing-btn-icon');
+  btn.disabled = on;
+  icon.className = on ? 'spin' : '';
+  icon.textContent = on ? '↻' : '☀';
+  btn.childNodes[1].textContent = on ? ' Loading…' : ' Generate Briefing';
+}
+
+function renderBriefingHTML(data) {
+  // data: { calendar: [...], actions: [...], emails: [...], narrative: string, ts: string }
+  const calRows = (data.calendar || []).map(e => `
+    <div class="bc-item">
+      <div class="bc-event-time">${e.time || 'All day'}</div>
+      <div class="bc-event-title">${e.title}</div>
+    </div>`).join('') || '<div style="color:var(--muted);font-size:13px;padding:6px 0;">Nothing on the calendar today.</div>';
+
+  const actionRows = (data.actions || []).map(a => `
+    <div class="bc-item">
+      <div class="bc-dot ${a.urgent ? 'urgent' : ''}"></div>
+      <div>${a.text}</div>
+    </div>`).join('') || '<div style="color:var(--muted);font-size:13px;padding:6px 0;">No urgent actions flagged.</div>';
+
+  const emailRows = (data.emails || []).map(e => `
+    <div class="bc-item">
+      <div class="bc-dot blue"></div>
+      <div><strong style="font-weight:500;">${e.from || ''}</strong>${e.from ? ' — ' : ''}${e.subject}</div>
+    </div>`).join('') || '<div style="color:var(--muted);font-size:13px;padding:6px 0;">No notable emails.</div>';
+
+  document.getElementById('briefing-body').innerHTML = `
+    <div class="briefing-grid">
+      <div class="briefing-card">
+        <div class="bc-label"><span class="bc-icon">📅</span> Today's Calendar</div>
+        <div class="bc-content">${calRows}</div>
+      </div>
+      <div class="briefing-card">
+        <div class="bc-label"><span class="bc-icon">⚡</span> Action Items</div>
+        <div class="bc-content">${actionRows}</div>
+      </div>
+      <div class="briefing-card full-width">
+        <div class="bc-label"><span class="bc-icon">✉</span> Notable Email</div>
+        <div class="bc-content">${emailRows}</div>
+      </div>
+      <div class="briefing-card full-width">
+        <div class="bc-label"><span class="bc-icon">📝</span> Summary</div>
+        <div class="briefing-narrative">${data.narrative || ''}</div>
+      </div>
+    </div>`;
+  document.getElementById('briefing-timestamp').textContent = 'Last updated: ' + (data.ts || new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }));
+}
+
+function showBriefingSkeleton() {
+  document.getElementById('briefing-body').innerHTML = `
+    <div class="briefing-grid">
+      ${[1,2,3,4].map(() => `
+        <div class="briefing-card ${[2,3].includes(0) ? '' : ''}">
+          <div class="briefing-skeleton">
+            ${[80,60,90,50,70].map(w => `<div class="skel-line" style="width:${w}%"></div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+async function runBriefing(forceRefresh = false) {
+  // Check cache first
+  const cacheKey = briefingCacheKey();
+  if (!forceRefresh) {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        renderBriefingHTML(JSON.parse(cached));
+        return;
+      } catch {}
+    }
+  }
+
+  setBriefingLoading(true);
+  showBriefingSkeleton();
+
+  const todayStr    = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  const todayISO    = new Date().toISOString().slice(0, 10);
+  const upcomingEvs = events
+    .filter(e => !e.done)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 6)
+    .map(e => `- ${e.title} (${e.date}${e.who ? ', ' + e.who : ''})`)
+    .join('\n');
+
+  const prompt = `Today is ${todayStr}.
+
+You are the Family Hub assistant for Avery Maniscalco in Tampa, FL. Her family:
+- Parker (son, 19): Home from Breckenridge, leaves on 5-week road trip Apr 6, needs summer job before college in fall
+- Addison (daughter, 18): Graduating high school, hostess + baking business, heading to college in fall
+- Mike (husband): Runs family office (real estate, stocks, multiple business entities)
+- Tracy (sister): Lives in Manchester-by-the-Sea, MA with husband Ed
+
+Upcoming Family Hub events:
+${upcomingEvs}
+
+Your job:
+1. Use your Google Calendar tool to fetch today's events (${todayISO})
+2. Use your Gmail tool to scan the last 20 emails and identify anything notable or requiring action
+
+Then respond with ONLY a JSON object (no markdown, no backticks) in this exact shape:
+{
+  "calendar": [{"time": "9:00 AM", "title": "Event name"}],
+  "actions": [{"text": "Action item description", "urgent": true}],
+  "emails": [{"from": "Sender name", "subject": "Subject line"}],
+  "narrative": "2-3 sentence plain-English summary of the day — what needs attention, what's coming up, any family context worth noting."
+}
+
+Rules:
+- calendar: list today's calendar events with times (or "All day"). If none, return [].
+- actions: up to 5 items. Flag urgent:true if time-sensitive (within 7 days or requires same-day response). Include anything related to the family — college deadlines, bills, job search, etc.
+- emails: up to 6 most notable emails from the past 48 hours worth Avery's attention. Skip newsletters and promotions.
+- narrative: conversational, direct, no fluff. Written for Avery specifically given her family context.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: BRIEFING_MODEL,
+        max_tokens: 2000,
+        mcp_servers: [
+          { type: 'url', url: GCAL_MCP,  name: 'gcal'  },
+          { type: 'url', url: GMAIL_MCP, name: 'gmail' }
+        ],
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const raw = await response.json();
+    const textBlocks = (raw.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+
+    // Strip any accidental markdown fences
+    const clean = textBlocks.replace(/```json|```/gi, '').trim();
+    // Extract JSON object from response
+    const match = clean.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON found in response');
+
+    const data = JSON.parse(match[0]);
+    data.ts = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+    // Cache for the day
+    localStorage.setItem(cacheKey, JSON.stringify(data));
+
+    renderBriefingHTML(data);
+  } catch (err) {
+    document.getElementById('briefing-body').innerHTML = `
+      <div class="briefing-empty">
+        <div class="be-icon">⚠️</div>
+        <p>Couldn't load briefing. Make sure you're running this inside claude.ai with Gmail and Google Calendar connected.<br><br><small style="color:var(--muted)">${err.message}</small></p>
+      </div>`;
+    document.getElementById('briefing-timestamp').textContent = 'Failed to load';
+  } finally {
+    setBriefingLoading(false);
+    // Update button to show refresh option
+    document.getElementById('briefing-btn').childNodes[1].textContent = ' Refresh';
+  }
+}
+
+// Auto-load briefing from cache when tab is opened
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('open'));
+  if (name === 'briefing') {
+    const cached = localStorage.getItem(briefingCacheKey());
+    if (cached) { try { renderBriefingHTML(JSON.parse(cached)); } catch {} }
+  }
+  if (name === 'markets') {
+    const cached = localStorage.getItem(marketCacheKey());
+    if (cached) { try { renderMarketsHTML(JSON.parse(cached)); } catch {} }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MARKETS
+═══════════════════════════════════════════════════════ */
+const MARKETS = [
+  { key: 'sp500',    label: 'S&P 500' },
+  { key: 'dow',      label: 'Dow' },
+  { key: 'nasdaq',   label: 'Nasdaq' },
+  { key: 'russell',  label: 'Russell 2000' },
+  { key: 'vix',      label: 'VIX' },
+  { key: 'treasury', label: '10-yr Treasury' },
+  { key: 'gold',     label: 'Gold' },
+  { key: 'oil',      label: 'WTI Crude' },
+];
+
+function marketCacheKey() {
+  return 'fh-markets-' + new Date().toISOString().slice(0, 10);
+}
+
+function setMarketsLoading(on) {
+  const btn  = document.getElementById('markets-btn');
+  const icon = document.getElementById('markets-btn-icon');
+  btn.disabled = on;
+  icon.className = on ? 'spin' : '';
+  icon.textContent = on ? '↻' : '📈';
+  btn.childNodes[1].textContent = on ? ' Loading…' : ' Refresh';
+}
+
+function renderMarketsHTML(data) {
+  const cards = MARKETS.map(m => {
+    const d   = data[m.key] || {};
+    const val = d.value  || '—';
+    const chg = d.change || '';
+    const pct = d.pct    || '';
+    const dir = d.dir    || 'flat';
+    const arrow = dir === 'up' ? '▲' : dir === 'down' ? '▼' : '—';
+    return `<div class="market-card ${dir}">
+      <div class="mc-name">${m.label}</div>
+      <div class="mc-value">${val}</div>
+      <div class="mc-change ${dir}">${arrow} ${chg}${pct ? ' (' + pct + ')' : ''}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('markets-body').innerHTML = `
+    <div class="markets-grid">${cards}</div>
+    ${data.narrative ? `<div class="markets-narrative">
+      <div class="bc-label"><span class="bc-icon">📝</span> Market Narrative</div>
+      <p>${data.narrative}</p>
+    </div>` : ''}
+    ${data.note ? `<div style="font-size:11px;color:var(--muted);margin-top:6px;padding:0 2px;">${data.note}</div>` : ''}`;
+
+  document.getElementById('markets-timestamp').textContent =
+    'Updated: ' + (data.ts || new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }));
+}
+
+async function runMarkets(forceRefresh = false) {
+  const cacheKey = marketCacheKey();
+  if (!forceRefresh) {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) { try { renderMarketsHTML(JSON.parse(cached)); return; } catch {} }
+  }
+
+  setMarketsLoading(true);
+
+  document.getElementById('markets-body').innerHTML = `
+    <div class="markets-grid">
+      ${MARKETS.map(m => `<div class="market-card flat">
+        <div class="mc-name">${m.label}</div>
+        <div class="mc-value" style="color:var(--border)">———</div>
+        <div class="mc-change flat">— —</div>
+      </div>`).join('')}
+    </div>
+    <div class="briefing-skeleton" style="margin-top:14px;">
+      ${[90,75,60].map(w => `<div class="skel-line" style="width:${w}%"></div>`).join('')}
+    </div>`;
+
+  const todayStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+  const prompt = `Today is ${todayStr}. You are a financial data assistant for a family office managing real estate, stocks, and business entities.
+
+Use web search to find current prices and daily changes for:
+S&P 500, Dow Jones, Nasdaq Composite, Russell 2000, VIX, 10-year Treasury yield, Gold (per oz), WTI Crude Oil (per barrel).
+
+Respond ONLY with a JSON object — no markdown, no backticks:
+{
+  "sp500":    { "value": "5,234", "change": "+12.4", "pct": "+0.24%", "dir": "up" },
+  "dow":      { "value": "39,127", "change": "-45.2", "pct": "-0.12%", "dir": "down" },
+  "nasdaq":   { "value": "16,342", "change": "+67.1", "pct": "+0.41%", "dir": "up" },
+  "russell":  { "value": "2,012", "change": "+3.2", "pct": "+0.16%", "dir": "up" },
+  "vix":      { "value": "18.42", "change": "-0.8", "pct": "-4.2%", "dir": "down" },
+  "treasury": { "value": "4.31%", "change": "+0.03", "pct": "", "dir": "up" },
+  "gold":     { "value": "$2,341", "change": "+8.50", "pct": "+0.36%", "dir": "up" },
+  "oil":      { "value": "$79.42", "change": "-0.61", "pct": "-0.76%", "dir": "down" },
+  "narrative": "2-3 sentence summary of today's market tone and anything relevant to a family office.",
+  "note": "Data as of [time] ET"
+}
+Rules: dir must be up/down/flat. Use real searched values only.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const raw = await response.json();
+    const textBlocks = (raw.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+    const match = textBlocks.replace(/```json|```/gi, '').match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON in response');
+
+    const data = JSON.parse(match[0]);
+    data.ts = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    localStorage.setItem(cacheKey, JSON.stringify(data));
+    renderMarketsHTML(data);
+  } catch (err) {
+    document.getElementById('markets-body').innerHTML = `
+      <div class="briefing-empty">
+        <div class="be-icon">⚠️</div>
+        <p>Couldn't load market data. Make sure you're inside claude.ai.<br><small style="color:var(--muted)">${err.message}</small></p>
+      </div>`;
+    document.getElementById('markets-timestamp').textContent = 'Failed';
+  } finally {
+    setMarketsLoading(false);
+  }
+}
+
+renderEvents();
+renderBills();
+Object.keys(notes).forEach(person => {
+  const el = document.getElementById('notes-' + person);
+  if (el && notes[person]) el.value = notes[person];
+});
+</script>
+</body>
+</html>
